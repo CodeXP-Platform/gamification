@@ -5,54 +5,50 @@ spring:
   application:
     name: ${APP_NAME:gamification}
 
-  # PostgreSQL
   datasource:
     url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:postgres}
     username: ${DB_USER:postgres}
-    password: ${DB_PASSWORD:postgres}
+    password: ${DB_PASSWORD:12345678}
     driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
+    open-in-view: false
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
 
-  # RabbitMQ
   rabbitmq:
     host: ${RABBITMQ_HOST:localhost}
     port: ${RABBITMQ_PORT:5672}
-    username: ${RABBITMQ_USER:rabbitmq}
-    password: ${RABBITMQ_PASS:rabbitmq}
-    virtual-host: ${RABBITMQ_VHOST:/}
+    username: ${RABBITMQ_USER:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
     listener:
       simple:
-        retry:
-          enabled: true
-          initial-interval: 3s
-          max-retries: 3
+        auto-startup: false
+      direct:
+        auto-startup: false
 
-# Eureka Config
 eureka:
-  instance:
-    # When using Docker/k8s then true
-    prefer-ip-address: ${EUREKA_PREFER_IP:true}
-    instance-id: ${spring.application.name}:${random.value}
   client:
-    register-with-eureka: ${EUREKA_REGISTER:true}
-    fetch-registry: ${EUREKA_FETCH:true}
-    service-url:
-      defaultZone: ${EUREKA_SERVER_URL:http://localhost:8761/eureka/}
+    enabled: false
+    register-with-eureka: false
+    fetch-registry: false
 
-# Actuator
 management:
-  endpoints:
-    web:
-      exposure:
-        include: health, info
-  endpoint:
-    health:
-      show-details: always
+  health:
+    rabbit:
+      enabled: false
+
+app:
+  rabbitmq:
+    exchanges:
+      code-analysis: codeanalysis.exchange
+      gamification: gamification.exchange
+    queues:
+      analysis-ready: gamification.analysis.ready.queue
+    routing-keys:
+      analysis-ready: codeanalysis.analysis.ready
+      achievement-unlocked: gamification.achievement.unlocked

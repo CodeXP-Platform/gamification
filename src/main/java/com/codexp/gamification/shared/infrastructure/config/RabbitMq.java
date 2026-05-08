@@ -42,6 +42,28 @@ public class RabbitMq {
     }
 
     @Bean
+    public TopicExchange iamExchange(RabbitAppProperties properties) {
+        return new TopicExchange(properties.getExchanges().getIam());
+    }
+
+    @Bean
+    public Queue userCreatedQueue(RabbitAppProperties properties) {
+        return new Queue(properties.getQueues().getUserCreated(), true);
+    }
+
+    @Bean
+    public Binding userCreatedBinding(
+            Queue userCreatedQueue,
+            TopicExchange iamExchange,
+            RabbitAppProperties properties
+    ) {
+        return BindingBuilder
+                .bind(userCreatedQueue)
+                .to(iamExchange)
+                .with(properties.getRoutingKeys().getUserCreated());
+    }
+
+    @Bean
     public MessageConverter jsonMessageConverter() {
         return new JacksonJsonMessageConverter();
     }

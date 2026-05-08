@@ -36,6 +36,7 @@ public class RabbitAppProperties {
     public static class Exchanges {
         private String codeAnalysis;
         private String gamification;
+        private String iam;
 
         public String getCodeAnalysis() {
             return codeAnalysis;
@@ -52,10 +53,19 @@ public class RabbitAppProperties {
         public void setGamification(String gamification) {
             this.gamification = gamification;
         }
+
+        public String getIam() {
+            return iam;
+        }
+
+        public void setIam(String iam) {
+            this.iam = iam;
+        }
     }
 
     public static class Queues {
         private String analysisReady;
+        private String userCreated;
 
         public String getAnalysisReady() {
             return analysisReady;
@@ -64,11 +74,20 @@ public class RabbitAppProperties {
         public void setAnalysisReady(String analysisReady) {
             this.analysisReady = analysisReady;
         }
+
+        public String getUserCreated() {
+            return userCreated;
+        }
+
+        public void setUserCreated(String userCreated) {
+            this.userCreated = userCreated;
+        }
     }
 
     public static class RoutingKeys {
         private String analysisReady;
         private String achievementUnlocked;
+        private String userCreated;
 
         public String getAnalysisReady() {
             return analysisReady;
@@ -84,6 +103,14 @@ public class RabbitAppProperties {
 
         public void setAchievementUnlocked(String achievementUnlocked) {
             this.achievementUnlocked = achievementUnlocked;
+        }
+
+        public String getUserCreated() {
+            return userCreated;
+        }
+
+        public void setUserCreated(String userCreated) {
+            this.userCreated = userCreated;
         }
     }
 }
